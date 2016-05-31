@@ -1,0 +1,103 @@
+#!/bin/sh
+
+
+# Run VLC Media Player as Root
+
+# Original Source: http://unix.stackexchange.com/questions/125546/how-to-run-vlc-player-in-root
+
+
+init(){
+
+	vlcOrig="/usr/bin/vlc"
+	vlcBackup="/usr/bin/vlc-original"
+
+	#backup
+
+	# Just using method 1 for now
+	method1
+
+	#method2
+
+	#restore
+}
+
+
+backup(){
+
+	clear
+	echo "Backing Up $vlcOrig --> $vlcBackup...."
+	echo ""
+	echo ""
+
+	sleep 3
+
+	cp $vlcOrig $vlcBackup
+
+}
+
+
+restore(){
+
+	clear
+	echo "Restoring $vlcBackup --> $vlcOrig...."
+	echo ""
+	echo ""
+
+	sleep 3
+
+	cp $vlcBackup $vlcOrig
+
+}
+
+
+method1(){
+
+	clear
+	echo "Patching VLC To Run As Root...."
+	echo ""
+	echo ""
+
+	sleep 3
+
+	sed -i 's/geteuid/getppid/' $vlcOrig
+
+}
+
+
+method2(){
+
+	clear
+	echo "Patching VLC To Run As Root...."
+	echo ""
+	echo ""
+
+	sleep 3
+
+	needle=$(objdump -d $vlcOrig | grep euid | tail -1 | awk '{print "\\x"$2"\\x"$3"\\x"$4"\\x"$5"\\x"$6;}')
+
+	sed -ir "s/$needle/\xb8\x01\x00\x00\x00/" $vlcOrig
+
+}
+
+
+# Make Backup If One Does Not Already Exist
+if [ ! -e $vlcBackup ]; then 
+	backup;
+fi
+
+
+# Restore From Back If Original Is Missing
+if [ ! -e $vlcOrig ]; then 
+	restore;
+fi
+
+
+
+init
+
+
+clear
+echo "Done!"
+echo ""
+echo ""
+
