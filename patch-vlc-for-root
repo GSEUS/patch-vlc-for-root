@@ -6,10 +6,12 @@
 # Original Source: http://unix.stackexchange.com/questions/125546/how-to-run-vlc-player-in-root
 
 
-init(){
 
-	vlcOrig="/usr/bin/vlc"
-	vlcBackup="/usr/bin/vlc-original"
+vlcOrig="/usr/bin/vlc"
+vlcBackup="/usr/bin/vlc-original"
+
+
+init(){
 
 	#backup
 
